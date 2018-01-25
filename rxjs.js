@@ -1,4 +1,4 @@
-exports.SafeObserver = class SafeObserver {
+class SafeObserver {
     constructor(observer) {
         this.observer = observer;
     }
@@ -47,3 +47,17 @@ exports.SafeObserver = class SafeObserver {
         }
     }
 }
+
+class Observer {
+    constructor(_subscribe) {
+        this._subscribe = _subscribe;
+    }
+
+    subscribe(observer) {
+        const safeObserver = new SafeObserver(observer);
+        return this._subscribe(safeObserver);
+    }
+}
+
+exports.SafeObserver = SafeObserver;
+exports.Observer = Observer;

@@ -1,7 +1,8 @@
-let SafeObserver = require('./rxjs').SafeObserver;
 let DataSource = require('./datasource').DataSource;
+let Observer = require('./rxjs').Observer;
+let SafeObserver = require('./rxjs').SafeObserver;
 
-function myObservable(observer) {
+const myObservable = new Observer((observer) => {
     let safeObs = new SafeObserver(observer);
     let datasource = new DataSource();
     datasource.ondata = (e) => safeObs.next(e);
@@ -13,31 +14,10 @@ function myObservable(observer) {
     }
 
     return safeObs.unsubscribe.bind(safeObs);
-}
-
-const obs = myObservable({
-    next(data) { console.log(data); },
-    error(err) { console.log("ERROR was happend", err); },
-    complete() { console.log("done"); }
 });
 
-
-
-// class Observable {
-
-//     constructor(datasource) {
-//         datasource.o
-//     }
-
-//     next() {
-
-//     }
-
-//     complete() {
-
-//     }
-
-//     error() {
-
-//     }
-// }
+const observer = myObservable.subscribe({
+    next: e => console.log(e),
+    error: err => console.log(err),
+    complete: () => console.log('done')
+})
