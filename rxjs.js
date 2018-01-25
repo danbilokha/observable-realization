@@ -55,8 +55,7 @@ class Observer {
 
     subscribe(observer) {
         const safeObserver = new SafeObserver(observer);
-        safeObserver.unsub = this._subscribe(safeObserver);
-        console.log(safeObserver.unsubscribe.bind(safeObserver));
+        safeObserver.unsub = this._subscribe(safeObserver); // Magic in the line
         return safeObserver.unsubscribe.bind(safeObserver);
     }
 }
