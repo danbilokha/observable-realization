@@ -1,23 +1,26 @@
 let DataSource = require('./datasource').DataSource;
 let Observer = require('./rxjs').Observer;
-let SafeObserver = require('./rxjs').SafeObserver;
+let map = require('./rxjs').map;
 
 const myObservable = new Observer((observer) => {
-    let safeObs = new SafeObserver(observer);
     let datasource = new DataSource();
-    datasource.ondata = (e) => safeObs.next(e);
-    datasource.onerror = (err) => safeObs.error(err); 
-    datasource.oncomplete = () => safeObs.complete();
 
-    safeObs.unsub = () => {
-        datasource.destroy();
-    }
+    datasource.ondata = (e) => observer.next(e);
+    datasource.onerror = (err) => observer.error(err); 
+    datasource.oncomplete = () => observer.complete();
 
-    return safeObs.unsubscribe.bind(safeObs);
+    return () => datasource.destroy();
 });
 
-const observer = myObservable.subscribe({
-    next: e => console.log(e),
-    error: err => console.log(err),
-    complete: () => console.log('done')
-})
+// const observer = myObservable.subscribe({
+//     next: e => console.log(e),
+//     error: err => console.log(err),
+//     complete: () => console.log('done')
+// })
+
+const observer = map(myObservable, x => x + x)
+    .subscribe({
+            next: e => console.log(e),
+            error: err => console.log(err),
+            complete: () => console.log('done')
+        })

@@ -55,9 +55,21 @@ class Observer {
 
     subscribe(observer) {
         const safeObserver = new SafeObserver(observer);
-        return this._subscribe(safeObserver);
+        safeObserver.unsub = this._subscribe(safeObserver);
+        console.log(safeObserver.unsubscribe.bind(safeObserver));
+        return safeObserver.unsubscribe.bind(safeObserver);
     }
 }
 
-exports.SafeObserver = SafeObserver;
+const map = (source, mapping) => new Observer(observer => {
+    const mapObserver = {
+        next: val => observer.next(mapping(val)),
+        error: err => observer.error(err),
+        complete: () => observer.complete()
+    }
+
+    return source.subscribe(mapObserver);
+})
+
 exports.Observer = Observer;
+exports.map = map;

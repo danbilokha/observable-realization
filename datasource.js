@@ -1,8 +1,8 @@
 class DataSource {
 
-    constructor(count = 10) {
+    constructor(countValueToEmit = 10) {
         let i = 0;
-        this._count = count;
+        this._count = countValueToEmit;
         this._emit = setInterval(() => this.emit(i += 1), 500);
     }
 
