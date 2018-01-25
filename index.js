@@ -1,6 +1,5 @@
-
-import {DataSource} from './datasource';
-import {SafeObserver} from './rxjs';
+let SafeObserver = require('./rxjs').SafeObserver;
+let DataSource = require('./datasource').DataSource;
 
 function myObservable(observer) {
     let safeObs = new SafeObserver(observer);

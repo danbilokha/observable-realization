@@ -1,4 +1,4 @@
-class SafeObserver {
+exports.SafeObserver = class SafeObserver {
     constructor(observer) {
         this.observer = observer;
     }
@@ -47,5 +47,3 @@ class SafeObserver {
         }
     }
 }
-
-export {SafeObserver};

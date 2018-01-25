@@ -1,4 +1,4 @@
-class DataSource {
+exports.DataSource = class DataSource {
 
     constructor(count = 10) {
         let i = 0;
@@ -24,5 +24,3 @@ class DataSource {
         clearInterval(this._emit);
     }
 }
-
-export {DataSource};
