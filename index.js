@@ -1,79 +1,6 @@
-class DataSource {
 
-    constructor(count = 10) {
-        let i = 0;
-        this._count = count;
-        this._emit = setInterval(() => this.emit(i += 1), 500);
-    }
-
-    emit(data) {
-        if(this.ondata) {
-            this.ondata(data);
-        }
-
-        if(data === this._count) {
-            if(this.oncomplete) {
-                this.oncomplete();
-            }
-
-            this.destroy();
-        }
-    }
-
-    destroy() {
-        clearInterval(this._emit);
-    }
-}
-
-class SafeObserver {
-    constructor(observer) {
-        this.observer = observer;
-    }
-
-    next(value) {
-        if(!this.isUnsubsribed && this.observer.next) {
-            try {
-                this.observer.next(value);
-            } catch (err) {
-                this.unsubscribe();
-                throw err;
-            }
-        }
-    }
-
-    error(err) {
-        if(!this.isUnsubsribed && this.observer.error) {
-            try {
-                this.observer.error();
-            } catch (err) {
-                this.unsubscribe();
-                throw err;
-            } finally {
-                this.unsubscribe();
-            }
-        }
-    }
-
-    complete() {
-        if(!this.isUnsubsribed && this.observer.complete) {
-            try {
-                this.observer.complete();
-            } catch (err) {
-                this.unsubscribe();
-                throw err;
-            } finally {
-                this.unsubscribe();
-            }
-        }
-    }
-
-    unsubscribe() {
-        this.isUnsubsribed = true;
-        if(this.unsub) {
-            this.unsub();
-        }
-    }
-}
+import {DataSource} from './datasource';
+import {SafeObserver} from './rxjs';
 
 function myObservable(observer) {
     let safeObs = new SafeObserver(observer);
@@ -94,6 +21,8 @@ const obs = myObservable({
     error(err) { console.log("ERROR was happend", err); },
     complete() { console.log("done"); }
 });
+
+
 
 // class Observable {
 
